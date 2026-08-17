@@ -3,6 +3,7 @@ import User from "../models/User.js"
 import bcrypt from "bcryptjs"
 import { generateToken } from "../lib/utils.js";
 import { ENV } from "../lib/env.js";
+import cloudinary from "../lib/cloudinary.js";
 
 export const signup = async (req, res) => {
     const {fullName, email, password} = req.body;
@@ -97,4 +98,26 @@ export const login = async (req, res) => {
 export const logout = (_, res) => {
   res.cookie("jwt","", {maxAge: 0});
   res.status(200).json({ message: "Logged out successfully" });
+};
+
+export const updateProfile = async(req, res) => {
+  try{
+    const { image } = req.body;
+    if(!image) return res.status(400).json({message: "Avata or Demo pic is requared, Do not put our real pic"});
+
+    const userId = req.user._id;
+
+    const uploadResponse = await cloudinary.uploader.upload(image)
+
+    const updatedUser = await User.findByIdAndUpdate(userId, 
+       {image: uploadResponse.secure_url},
+       {new:true}
+    );
+
+    res.status(200).json(updatedUser)
+
+  }catch (error){
+    console.log("error in update Profile:", error);
+    res.status(500).json({message: "Internal server error"});
+  }
 };
