@@ -41,8 +41,8 @@ export const signup = async (req, res) => {
 
           //after CRUD
           //Persist user first, then issue auth cookie
-        const savedUserb = await newUser.save();
-        generateToken(savedUserb._id, res);
+        const savedUser = await newUser.save();
+        generateToken(savedUser._id, res);
 
           res.status(201).json({
             _id: newUser._id,
@@ -64,4 +64,33 @@ export const signup = async (req, res) => {
         console.log("Error in signup controller:", error)
         res.status(500).json({ message: "Internal server error" });
     }
+};
+
+export const login = async (req, res) => {
+  const { email, password} = req.body
+
+  try{
+    const user = await User.findOne({email})
+    if(!user) return res.status(400).json({message:"Invalid Credentials"})
+      // never tell the client which one is incorrent: password or email
+
+    const isPasswordCorrect = await bcrypt.compare(password,user.password)
+    if(!isPasswordCorrect) return res.status(400).json({message: "Invalid Credentials"});
+
+    generateToken(user._id,res)
+
+    res.status(200).json({
+      _id: user.id,
+      fullName: user.fullName,
+      image: user.image,
+    });
+  } catch (error){
+    console.error("Error in login controller:",error)
+    res.status(500).json({messaged:"Internal server error"})
+  }
+};
+
+export const logout = (_, res) => {
+  res.cookie("jwt","", {maxAge: 0});
+  res.status(200).json({ message: "Logged out successfully" });
 };
