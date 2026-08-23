@@ -11,8 +11,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@arcjet/inspect": "^1.5.0",
+    "@arcjet/node": "^1.5.0",
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.10.1",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "incident_report": "file:..",
