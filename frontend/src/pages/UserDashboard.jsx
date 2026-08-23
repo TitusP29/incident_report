@@ -1,9 +1,13 @@
-import React from 'react'
+import { useAuthStore } from "../store/useAuthStore";
 
-export default function UserDashboard() {
+function UserDashboard() {
+  const { logout } = useAuthStore();
   return (
-    <div>
-      
+
+    <div className="z-10">
+    Dashboard
+    <button onClick={logout}>logout</button>  
     </div>
-  )
+  );
 }
+export default UserDashboard
