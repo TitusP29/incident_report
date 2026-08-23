@@ -37,6 +37,8 @@ function App() {
         <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />} />
       </Routes>
 
+    <Toaster />
+
     </div>
   );
 }
