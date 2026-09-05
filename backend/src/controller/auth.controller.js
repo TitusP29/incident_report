@@ -23,6 +23,7 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "Invalid email format" });
     }
 
+    // Check if user exist
     const user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "Email already exists" });
 
@@ -51,6 +52,7 @@ export const signup = async (req, res) => {
         fullName: newUser.fullName,
         email: newUser.email,
         profilePic: newUser.profilePic,
+        role: newUser.role,
       });
 
       try {
@@ -89,6 +91,7 @@ export const login = async (req, res) => {
       fullName: user.fullName,
       email: user.email,
       profilePic: user.profilePic,
+      role: user.role,  
     });
   } catch (error) {
     console.error("Error in login controller:", error);
@@ -97,7 +100,10 @@ export const login = async (req, res) => {
 };
 
 export const logout = (_, res) => {
-  res.cookie("jwt", "", { maxAge: 0 });
+  res.cookie("jwt", "", { maxAge: 0,
+     secure: process.env.NODE_ENV === "production",
+     httpOnly: true,
+     sameSite: "strict" });
   res.status(200).json({ message: "Logged out successfully" });
 };
 

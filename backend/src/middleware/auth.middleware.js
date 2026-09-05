@@ -20,3 +20,13 @@ export const protectRoute = async (req, res, next) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const verifyRole = (role) => {
+    return (req, res, next) => {
+      const userRole = req.user?.role;
+      if (userRole !== role) {
+        return res.status(403).json({ message: "Forbidden - You do not have the required role" });
+      }
+      next();
+    };
+  };
