@@ -7,6 +7,7 @@ import SignUpPage from "./pages/SignUpPage";
 import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import InvestigatorDashboard from "./pages/InvestigatorDashboard";
+import NewReport from "./pages/NewReport";
 
 import { useAuthStore } from "./store/useAuthStore";
 import PageLoader from "./components/PageLoader";
@@ -48,6 +49,18 @@ function App() {
           element={
             authUser?.role === "user" ? (
               <UserDashboard />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+
+        {/* NEW REPORT ELIGIBILITY SCREEN */}
+        <Route
+          path="/new-report"
+          element={
+            authUser?.role === "user" ? (
+              <NewReport />
             ) : (
               <Navigate to="/" replace />
             )
