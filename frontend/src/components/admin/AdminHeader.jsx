@@ -1,48 +1,58 @@
-import { HelpCircle, X } from "lucide-react";
+import { LogOutIcon, HelpCircle } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { useAuthStore } from "../../store/useAuthStore";
 
 export default function AdminHeader() {
   const location = useLocation();
+  const { logout } = useAuthStore();
 
   const pageInfo = {
     "/admin": {
       title: "Admin Dashboard",
-      subtitle: "Community incident administration and case management",
+      subtitle:
+        "Community incident administration and case management",
     },
 
     "/admin/assignments": {
       title: "Assignments",
-      subtitle: "Assign incidents to authorized investigators",
+      subtitle:
+        "Assign incidents to authorized investigators",
     },
 
     "/admin/progress-updates": {
       title: "Record Case Progress",
-      subtitle: "Authorized SAPS administrative updates and investigation history",
+      subtitle:
+        "Authorized SAPS administrative updates and investigation history",
     },
 
     "/admin/cases": {
       title: "Cases",
-      subtitle: "Review and manage reported incidents",
+      subtitle:
+        "Review and manage reported incidents",
     },
 
     "/admin/evidence": {
       title: "Evidence",
-      subtitle: "Manage evidence associated with active cases",
+      subtitle:
+        "Manage evidence associated with active cases",
     },
 
     "/admin/reports": {
       title: "Reports",
-      subtitle: "Review incident and case statistics",
+      subtitle:
+        "Review incident and case statistics",
     },
 
     "/admin/users": {
       title: "Users",
-      subtitle: "Manage system users and access",
+      subtitle:
+        "Manage system users and access",
     },
 
     "/admin/audit-log": {
       title: "Audit Log",
-      subtitle: "Review authorized system activity",
+      subtitle:
+        "Review authorized system activity",
     },
   };
 
@@ -53,9 +63,8 @@ export default function AdminHeader() {
 
   return (
     <header className="border-b border-slate-200 bg-white px-7 py-4">
-
       <div className="flex items-start justify-between">
-
+        {/* PAGE TITLE */}
         <div>
           <h1 className="text-xl font-bold text-slate-900">
             {current.title}
@@ -66,20 +75,26 @@ export default function AdminHeader() {
           </p>
         </div>
 
-        <div className="flex gap-3">
-
-          <button className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-300 text-slate-500 hover:bg-slate-100">
-            <X size={13} />
+        {/* HEADER ACTIONS */}
+        <div className="flex items-center gap-3">
+          {/* LOGOUT */}
+          <button
+            onClick={logout}
+            className="text-slate-400 hover:text-red-500 transition-colors"
+            title="Logout"
+          >
+            <LogOutIcon className="size-5" />
           </button>
 
-          <button className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-300 text-slate-500 hover:bg-slate-100">
+          {/* HELP */}
+          <button
+            className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-300 text-slate-500 hover:bg-slate-100"
+            title="Help"
+          >
             <HelpCircle size={13} />
           </button>
-
         </div>
-
       </div>
-
     </header>
   );
 }
