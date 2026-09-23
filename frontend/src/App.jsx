@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import UserDashboard from "./pages/UserDashboard";
 import InvestigatorDashboard from "./pages/investigators/InvestigatorDashboard";
+import InitialScreening from "./components/users/incident/InitialScreening";
 
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -57,6 +58,17 @@ function App() {
           element={
             authUser?.role === "user" ? (
               <UserDashboard />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/new-report"
+          element={
+            authUser?.role === "user" ? (
+              <InitialScreening />
             ) : (
               <Navigate to="/" replace />
             )
