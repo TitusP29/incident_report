@@ -1,13 +1,13 @@
 import { useState } from "react";
 
-import SouthAfricaBar from "../components/SouthAfricaBar";
-import DashboardHeader from "../components/DashboardHeader";
-import EmergencyCard from "../components/EmergencyCard";
-import OnlineReportingCard from "../components/OnlineReportingCard";
-import ProcessSteps from "../components/ProcessSteps";
-import DashboardFooter from "../components/DashboardFooter";
-import EmergencyModal from "../components/EmergencyModal";
-import EmergencyContacts from "../components/EmergencyContacts";
+import SouthAfricaBar from "../components/users/SouthAfricaBar";
+import DashboardHeader from "../components/users/DashboardHeader";
+import EmergencyCard from "../components/users/EmergencyCard";
+import OnlineReportingCard from "../components/users/OnlineReportingCard";
+import ProcessSteps from "../components/users/ProcessSteps";
+import DashboardFooter from "../components/users/DashboardFooter";
+import EmergencyModal from "../components/users/EmergencyModal";
+import EmergencyContacts from "../components/users/EmergencyContacts";
 
 function UserDashboard() {
   const [showEmergencyModal, setShowEmergencyModal] = useState(false);
