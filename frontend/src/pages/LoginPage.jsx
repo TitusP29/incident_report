@@ -13,6 +13,46 @@ function LoginPage() {
     login(formData);
   };
 
+const handleLogin = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await axios.post(
+      "http://localhost:3000/api/auth/login",
+      form,
+      {
+        withCredentials: true,
+      }
+    );
+
+    console.log("Login successful:", res.data);
+
+    const user = res.data;
+
+    // Save logged-in user in Zustand
+    setAuthUser(user);
+
+    // Redirect based on role
+    if (user.role === "admin") {
+      navigate("/admin");
+    } else if (user.role === "investigator") {
+      navigate("/investigator");
+    } else {
+      navigate("/user");
+    }
+  } catch (err) {
+    console.error(
+      "Login error:",
+      err.response?.data || err.message
+    );
+
+    setError(
+      err.response?.data?.message ||
+        "Invalid email or password"
+    );
+  }
+};
+
   return (
     <div className="w-full flex items-center justify-center p-4 bg-slate-900">
       <div className="relative w-full max-w-6xl md:h-[800px] h-[650px]">
