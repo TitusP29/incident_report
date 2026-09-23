@@ -14,7 +14,7 @@ import ProgressUpdates from "./pages/admin/ProgressUpdates";
 import Investigators from "./pages/admin/Investigators";
 
 import { useAuthStore } from "./store/useAuthStore";
-import PageLoader from "./components/PageLoader";
+import PageLoader from "./components/users/PageLoader";
 
 function App() {
   const {
