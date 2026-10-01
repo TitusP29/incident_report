@@ -8,7 +8,7 @@ import {
   UserIcon,
   LoaderIcon,
 } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -17,12 +17,24 @@ function SignUpPage() {
     password: "",
   });
 
+  const navigate = useNavigate();
+
   const { signup, isSigningUp } = useAuthStore();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     signup(formData);
+    try {
+      await axios.post("/ api/auth/signup", form, {
+        withCredentials: true,
+      });
+      navigate("/login");
+    } catch (error) {
+      setError("Signup failed. Please try again.");
+      console.error(error);
+    }
   };
+    
 
   return (
     <div className="w-full flex items-center justify-center p-4 bg-slate-900">

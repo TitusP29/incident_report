@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+
+import { axiosInstance } from "../../lib/axios";
 
 import CaseHeader from "../../components/admin/CaseHeader";
 import CaseTimeline from "../../components/admin/CaseTimeline";
 import CaseUpdateForm from "../../components/admin/CaseUpdateForm";
-
-const API = "http://localhost:3000/api";
 
 export default function ProgressUpdates() {
   const { incidentId } = useParams();
@@ -26,32 +25,24 @@ export default function ProgressUpdates() {
     try {
       setLoading(true);
 
-      const [incidentRes, updatesRes] =
-        await Promise.all([
-          axios.get(
-            `${API}/incidents/${incidentId}`,
-            {
-              withCredentials: true,
-            }
-          ),
+      const [incidentRes, updatesRes] = await Promise.all([
+        axiosInstance.get(`/incidents/${incidentId}`),
 
-          axios.get(
-            `${API}/case-updates/incident/${incidentId}`,
-            {
-              withCredentials: true,
-            }
-          ),
-        ]);
+        axiosInstance.get(
+          `/case-updates/incident/${incidentId}`
+        ),
+      ]);
 
       setIncident(
         incidentRes.data.incident ||
-          incidentRes.data
+        incidentRes.data
       );
 
       setUpdates(
-        updatesRes.data.updates || []
+        updatesRes.data.updates ||
+        updatesRes.data ||
+        []
       );
-
     } catch (error) {
       console.error(
         "Error loading case:",
@@ -66,19 +57,15 @@ export default function ProgressUpdates() {
     try {
       setSubmitting(true);
 
-      await axios.post(
-        `${API}/case-updates`,
+      await axiosInstance.post(
+        "/case-updates",
         {
           incidentId,
           ...data,
-        },
-        {
-          withCredentials: true,
         }
       );
 
       await loadCase();
-
     } catch (error) {
       console.error(
         "Error submitting update:",
@@ -87,12 +74,22 @@ export default function ProgressUpdates() {
 
       alert(
         error.response?.data?.message ||
-          "Failed to submit update"
+        "Failed to submit update"
       );
     } finally {
       setSubmitting(false);
     }
   };
+
+  if (!incidentId) {
+    return (
+      <div className="flex h-96 items-center justify-center">
+        <p className="text-sm text-red-500">
+          No incident ID was provided.
+        </p>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -104,20 +101,30 @@ export default function ProgressUpdates() {
     );
   }
 
+  if (!incident) {
+    return (
+      <div className="flex h-96 items-center justify-center">
+        <p className="text-sm text-red-500">
+          Case not found.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className="mx-auto w-full max-w-7xl">
+    <div className="mx-auto w-full max-w-7xl space-y-4">
 
       <CaseHeader
         caseNumber={
-          incident?.caseNumber ||
-          incident?._id
+          incident.caseNumber ||
+          incident._id
         }
         reportNumber={
-          incident?.reportNumber ||
-          incident?._id
+          incident.reportNumber ||
+          incident._id
         }
         status={
-          incident?.status ||
+          incident.status ||
           "UNDER INVESTIGATION"
         }
       />
