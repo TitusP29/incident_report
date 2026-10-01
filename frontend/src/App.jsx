@@ -15,7 +15,10 @@ import ProgressUpdates from "./pages/admin/ProgressUpdates";
 import Investigators from "./pages/admin/Investigators";
 
 import { useAuthStore } from "./store/useAuthStore";
+
 import PageLoader from "./components/users/PageLoader";
+import PrivateRoute from "./components/PrivateRoute";
+import PublicRoute from "./components/PublicRoute";
 
 function App() {
   const {
@@ -52,26 +55,59 @@ function App() {
           }
         />
 
+        {/* LOGIN */}
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-900 p-4">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]" />
+
+                <div className="absolute -left-4 top-0 size-96 bg-pink-500 opacity-20 blur-[100px]" />
+
+                <div className="absolute -right-4 bottom-0 size-96 bg-cyan-500 opacity-20 blur-[100px]" />
+
+                <LoginPage />
+              </div>
+            </PublicRoute>
+          }
+        />
+
+        {/* SIGN UP */}
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-900 p-4">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]" />
+
+                <div className="absolute -left-4 top-0 size-96 bg-pink-500 opacity-20 blur-[100px]" />
+
+                <div className="absolute -right-4 bottom-0 size-96 bg-cyan-500 opacity-20 blur-[100px]" />
+
+                <SignUpPage />
+              </div>
+            </PublicRoute>
+          }
+        />
+
         {/* USER */}
         <Route
           path="/user"
           element={
-            authUser?.role === "user" ? (
+            <PrivateRoute allowedRole={["user"]}>
               <UserDashboard />
-            ) : (
-              <Navigate to="/" replace />
-            )
+            </PrivateRoute>
           }
         />
 
+        {/* NEW INCIDENT REPORT */}
         <Route
           path="/new-report"
           element={
-            authUser?.role === "user" ? (
+            <PrivateRoute allowedRole={["user"]}>
               <InitialScreening />
-            ) : (
-              <Navigate to="/" replace />
-            )
+            </PrivateRoute>
           }
         />
 
@@ -79,11 +115,9 @@ function App() {
         <Route
           path="/admin"
           element={
-            authUser?.role === "admin" ? (
+            <PrivateRoute allowedRole={["admin"]}>
               <AdminLayout />
-            ) : (
-              <Navigate to="/" replace />
-            )
+            </PrivateRoute>
           }
         >
           <Route index element={<AdminDashboard />} />
@@ -108,52 +142,16 @@ function App() {
         <Route
           path="/investigator"
           element={
-            authUser?.role === "investigator" ? (
+            <PrivateRoute allowedRole={["investigator"]}>
               <InvestigatorDashboard />
-            ) : (
-              <Navigate to="/" replace />
-            )
+            </PrivateRoute>
           }
         />
 
-        {/* LOGIN */}
+        {/* FALLBACK */}
         <Route
-          path="/login"
-          element={
-            !authUser ? (
-              <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-900 p-4">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]" />
-
-                <div className="absolute -left-4 top-0 size-96 bg-pink-500 opacity-20 blur-[100px]" />
-
-                <div className="absolute -right-4 bottom-0 size-96 bg-cyan-500 opacity-20 blur-[100px]" />
-
-                <LoginPage />
-              </div>
-            ) : (
-              <Navigate to="/" replace />
-            )
-          }
-        />
-
-        {/* SIGN UP */}
-        <Route
-          path="/signup"
-          element={
-            !authUser ? (
-              <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-900 p-4">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]" />
-
-                <div className="absolute -left-4 top-0 size-96 bg-pink-500 opacity-20 blur-[100px]" />
-
-                <div className="absolute -right-4 bottom-0 size-96 bg-cyan-500 opacity-20 blur-[100px]" />
-
-                <SignUpPage />
-              </div>
-            ) : (
-              <Navigate to="/" replace />
-            )
-          }
+          path="*"
+          element={<Navigate to="/" replace />}
         />
 
       </Routes>
